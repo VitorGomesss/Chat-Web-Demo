@@ -9,10 +9,24 @@
 <body>
     <div class="container">
         <h1>Portal de Atendimento</h1>
-        <p>Clique no ícone de chat no canto inferior direito para iniciar o suporte com um atendente em tempo real.</p>
+        
+        <!-- Estado 1: Utilizador sem sessão -->
+        <div id="identificacao-container">
+            <p>Preencha os seus dados antes de iniciar o chat:</p>
+            <input type="text" id="campo-nome" placeholder="O seu Nome (ex: Vitor)">
+            <input type="text" id="campo-id" placeholder="O seu E-mail ou ID (ex: 1005)">
+            <button onclick="salvarEIniciar()">Guardar e Iniciar Chat</button>
+        </div>
+
+        <!-- Estado 2: Utilizador reconhecido -->
+        <div id="sessao-ativa-container" style="display:none;">
+            <p><strong>Bem-vindo(a) de volta!</strong></p>
+            <p id="dados-salvos" class="dados-destaque"></p>
+            <p class="status-verde">O chat reconhecerá a sua conta automaticamente.</p>
+            <button onclick="limparSessao()" class="btn-limpar">Limpar Dados / Novo Utilizador</button>
+        </div>
     </div>
 
-    <!-- Script com as funções do Amazon Connect -->
     <script src="script.js"></script>
 </body>
 </html>
