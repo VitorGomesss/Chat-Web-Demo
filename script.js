@@ -1,47 +1,48 @@
-// 1. Leitura dos dados guardados no navegador
+// 1. Leitura dos dados armazenados no navegador
 const clienteSalvoId = localStorage.getItem('clienteId');
 const clienteSalvoNome = localStorage.getItem('nome');
 
-// Alterna o ecrã caso o cliente já esteja registado
+// Se já existir um pacote/cliente salvo, exibe o painel de acompanhamento
 if (clienteSalvoId) {
     document.getElementById('identificacao-container').style.display = 'none';
     document.getElementById('sessao-ativa-container').style.display = 'block';
-    document.getElementById('dados-salvos').innerHTML = `Nome: ${clienteSalvoNome} <br> ID: ${clienteSalvoId}`;
+    document.getElementById('dados-salvos').innerHTML = `
+        <strong>Código do Pacote:</strong> ${clienteSalvoId} <br>
+        <strong>Destinatário:</strong> ${clienteSalvoNome}
+    `;
 }
 
-// 2. Funções de controlo dos botões
+// 2. Funções de controle dos botões
 function salvarEIniciar() {
     const nome = document.getElementById('campo-nome').value.trim();
     const id = document.getElementById('campo-id').value.trim();
 
     if (!nome || !id) {
-        alert("Por favor, preencha o Nome e o ID/E-mail.");
+        alert("Por favor, preencha o Nome do Destinatário e o Código de Rastreio.");
         return;
     }
 
+    // Mantemos as mesmas chaves para não quebrar a Lambda nem o Connect
     localStorage.setItem('nome', nome);
     localStorage.setItem('clienteId', id);
     
-    // Recarrega a página para inicializar o chat com os dados
+    // Recarrega a página para inicializar o widget com os parâmetros da entrega
     location.reload(); 
 }
 
 function limparSessao() {
     localStorage.removeItem('nome');
     localStorage.removeItem('clienteId');
-    
-    // Recarrega a página para remover o chat
     location.reload();
 }
 
 // ==========================================
-// 3. INICIAÇÃO DO CHAT (BLINDADA)
-// O chat SÓ aparece se houver dados no navegador
+// 3. INICIALIZAÇÃO DO CHAT
+// Carrega o widget apenas quando houver encomenda identificada
 // ==========================================
 
 if (clienteSalvoId) {
     
-    // Inicia o Amazon Connect
     (function(w, d, x, id){
       s=d.createElement('script');
       s.src='https://testeskillbuilder.my.connect.aws/connectwidget/static/amazon-connect-chat-interface-client.js';
@@ -53,8 +54,8 @@ if (clienteSalvoId) {
 
     amazon_connect('styles', { 
         iconType: 'CHAT', 
-        openChat: { color: '#ffffff', backgroundColor: '#123456' }, 
-        closeChat: { color: '#ffffff', backgroundColor: '#123456'} 
+        openChat: { color: '#ffffff', backgroundColor: '#0284c7' }, 
+        closeChat: { color: '#ffffff', backgroundColor: '#0284c7'} 
     });
 
     amazon_connect('snippetId', 'QVFJREFIaEZ5ZjhlbTkwTGlJQ0RQVlozbFpkalBOMm91NWh2aGNUZHZhTTZac1lEMndFL0lYS3pFTFNWTUZHNjhVMUhwc3BvQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNLzA3ZmZYVXZhODZheTlHWEFnRVFnQ3VGc0xXcVpoWGxSdDZxUGsxWWpnRlNnT0dqelB4R3NaRUJmWUcyM1RYUGVlancwVkk0cCt3bFNNTEo6Ok5XQy9ZclJOWWVZLzF1M2RXMmpYTFhoUnp0UDFvcmJncEYxQUcyNE45alR3SEFKbG94K244RkZIaE5lSEEvOEdnZ0Z2YVhuYzdyUFJGZXVrekFVMVR2bHEvdzg1OEZXaExGQ1ZnbnFDdCsvRHZscit3RHExRnIrNHdnUWxRcEZCTXpXeEkrbmlJUE9Ub2hSTXZzdTRMcVNEMXNWaFBIRT0=');
@@ -66,7 +67,7 @@ if (clienteSalvoId) {
         'application/vnd.amazonaws.connect.message.interactive.response' 
     ]);
 
-    // Passa os atributos obrigatoriamente
+    // Envia os dados para a sessão do Amazon Connect
     amazon_connect('contactAttributes', {
         clienteId: clienteSalvoId,
         nome: clienteSalvoNome
