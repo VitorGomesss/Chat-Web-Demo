@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demonstração Chat Amazon Connect</title>
+    <title>Portal de Rastreio e Suporte</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Portal de Atendimento</h1>
+        <div class="header-icon">📦</div>
+        <h1>Rastreamento de Encomendas</h1>
         
-        <!-- Estado 1: Utilizador sem sessão -->
+        <!-- Estado 1: Nenhum pacote sendo rastreado no momento -->
         <div id="identificacao-container">
-            <p>Preencha os seus dados antes de iniciar o chat:</p>
-            <input type="text" id="campo-nome" placeholder="O seu Nome (ex: Vitor)">
-            <input type="text" id="campo-id" placeholder="O seu E-mail ou ID (ex: 1005)">
-            <button onclick="salvarEIniciar()">Guardar e Iniciar Chat</button>
+            <p>Consulte o status da sua entrega e tire dúvidas em tempo real com nosso suporte:</p>
+            <input type="text" id="campo-nome" placeholder="Nome do Destinatário (ex: Carlos)">
+            <input type="text" id="campo-id" placeholder="Código de Rastreio / Pacote (ex: BR1005)">
+            <button onclick="salvarEIniciar()">Rastrear Encomenda</button>
         </div>
 
-        <!-- Estado 2: Utilizador reconhecido -->
+        <!-- Estado 2: Pacote em acompanhamento (sessão ativa) -->
         <div id="sessao-ativa-container" style="display:none;">
-            <p><strong>Bem-vindo(a) de volta!</strong></p>
+            <div class="badge-status">Pacote em Acompanhamento</div>
             <p id="dados-salvos" class="dados-destaque"></p>
-            <p class="status-verde">O chat reconhecerá a sua conta automaticamente.</p>
-            <button onclick="limparSessao()" class="btn-limpar">Limpar Dados / Novo Utilizador</button>
+            <p class="status-verde">✔ Dados sincronizados com a central de atendimento.</p>
+            <p class="instrucao-chat">Abra o chat no canto inferior para consultar detalhes ou falar com um especialista sobre esta entrega.</p>
+            <button onclick="limparSessao()" class="btn-limpar">Rastrear Outro Pacote</button>
         </div>
     </div>
 
